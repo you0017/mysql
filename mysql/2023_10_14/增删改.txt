@@ -1,0 +1,39 @@
+desc stu_i;
+desc stu_01;
+
+create table stu_i(
+	sid int primary key,
+	sname  varchar(20),
+	birthday varchar(100)
+)
+drop table stu_i;
+
+insert into stu_i values(1,'小红','2003-1-1');
+
+create table stu_01(
+	id int,
+	sname varchar(6),
+	addre varchar(100)
+)
+drop table stu_01;
+
+insert into stu_01 values(3,'ad','qeqw'),(4,'afa','qgdw'),(5,'a阿达瓦','挨打');
+
+insert into stu_i(sid,sname) select id,sname from stu_01; 
+-- 要求数据相同，字段顺序一致，字段类型相似
+
+select * from stu_i;
+
+
+insert into stu_i VALUES(3,'ad','qeqw');
+replace into stu_i VALUES(3,'111','111');
+-- 没有主键约束就是增加操作，有主键就是替换操作
+
+create table stu_02 select * from stu_01;
+select * from stu_02;
+desc stu_02;
+-- 复制表结构和数据，但是不复制主键，约束等关系
+
+
+select * from stu_i;
+update stu_i set birthday='2002-02-02' where sname='ad';

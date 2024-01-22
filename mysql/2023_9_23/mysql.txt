@@ -1,0 +1,61 @@
+drop table stu_01;
+
+select * from stu_01;
+
+create table stu_01(
+ sid int primary key auto_increment,
+ sname varchar(10),
+ address varchar(20),
+ age int,
+ check(age>=10 and age<=20),
+ check(LENGTH(sname)>=1 and LENGTH(sname)<=5)
+ );
+ 
+ 
+ insert into stu_01 values('1','0010016','赵可以','河南新乡'),
+		('2','0010015','张丽鹃','河南新乡'),
+		('3','0010014','雷铜','江西南昌'),
+		('4','0010013','吴兰','湖南新田'),
+		('5','李山','山东定陶');
+		
+	insert into stu_01(sname,address) values('赵可以','河南新乡');
+	insert into stu_01(sname) values('河南新乡');
+	
+	insert into stu_01(sname,address,age) values('赵','河南新乡',15);
+	
+	select LENGTH('赵可');
+	
+	
+drop table stu_01;
+drop table score;
+
+select * from stu_01;
+select * from score;
+
+	
+create table stu_01(
+ sid varchar(20) primary key,
+ sname varchar(10),
+ address varchar(20)
+ )default charset='utf8';
+ 
+ create table score(
+ course varchar(20),
+ sid varchar(20),
+ score int,
+ CONSTRAINT fk_01 FOREIGN KEY(sid) REFERENCES stu_01(sid)
+ )default charset='utf8';
+ 
+
+ 
+ insert into score values('数学','0010015',80);
+ 
+ insert into stu_01 values('0010016','赵可以','河南新乡'),
+		('0010015','张丽鹃','河南新乡'),
+		('0010014','雷铜','江西南昌'),
+		('0010013','吴兰','湖南新田'),
+		('0010012','李山','山东定陶');
+ 
+ 
+ alter table stu_01 drop FOREIGN key fk_01;
+ 

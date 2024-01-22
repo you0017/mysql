@@ -1,0 +1,142 @@
+mysql数据库作业_20230923:
+1、整理数据库知识点xmind + 笔记 
+2、创建一个数据库 db_自己名字拼音 并连接
+3、创建三个表格：
+     S(S#,SN,SD,SA)S#,SN,SD,SA分别代表学号(主键)，学员姓名，所属单位，学员年龄（0--150）
+     C(C#,CN)C#,CN分别代表课程编号(主键)，课程名称
+     SC(S#,C#,G) S#,C#,G分别代表学号(外键)，所选的课程编号(外键)，学习成绩
+要求：
+对于SC表中的学习成绩，默认字段值为0.0 ；对于S表中 所属单位 默认值为 长沙理工大学
+分别在表中插入 10条任意数据
+4、创建一个数据库 db_aa,查看数据库表结构 、删除数据库、
+5、DDL 、DML 分别包含哪些关键字
+6、创建一个新表 ，stu表 字段：sid,sname，完成如下操作：
+6.1 给表换个名称为 stu_001
+6.2 在表中新增字段  height float类型
+6.3 把新增的字段改名为 hei 
+6.4 删除新增的字段
+7、数据库的完整性包含哪三种，分别通过哪些不同的约束实现的？
+
+继续预习mysql后续的内容
+
+
+2.
+create database db_zeh;
+
+use db_zeh;
+
+3.
+create table S(
+	S varchar(20) primary key, #学号
+	SN varchar(10),#姓名
+	SD varchar(20) default '长沙理工大学',#所属单位
+	SA int, #年龄
+	check(SA>=0 and SA<=150)
+);
+
+create table C(
+	C varchar(20) primary key,#编号
+	CN varchar(20)#课程名称
+);
+
+select * from S;
+select * from C;
+select * from SC;
+
+drop table SC;
+drop table S;
+drop table C;
+
+create table SC(
+	S varchar(20),
+	C varchar(20),
+	G decimal(4,1) default 0.0,
+	CONSTRAINT S_1 FOREIGN key (S) REFERENCES S(S),
+	CONSTRAINT C_1 FOREIGN key (C) REFERENCES C(C)
+);
+
+insert into S(S,SN,SA) values('2023001','甲','20'),
+	('2023002','乙','19'),
+	('2023003','丙','21'),
+	('2023004','丁','22'),
+	('2023005','戊','23'),
+	('2023006','己','21'),
+	('2023007','庚','21'),
+	('2023008','辛','22'),
+	('2023009','壬','23'),
+	('2023010','葵','21');
+	
+insert into C values('1','语文'),
+	('2','数学'),
+	('3','英语'),
+	('4','物理'),
+	('5','化学'),
+	('6','生物'),
+	('7','历史'),
+	('8','地理'),
+	('9','政治'),
+	('10','体育');
+	
+insert into SC values('2023001','1',60),
+	('2023002','2',61),
+	('2023003','3',62),
+	('2023004','4',63),
+	('2023005','5',64),
+	('2023006','6',65),
+	('2023007','7',66),
+	('2023008','8',67),
+	('2023009','9',68),
+	('2023010','10',69);
+
+4.
+create database db_aa;
+use db_aa;
+
+show TABLEs;
+
+create table A(
+	a int,
+	b varchar(20)
+);
+create table b(
+	a int,
+	b varchar(20)
+);
+
+desc A;
+desc b;
+
+drop database db_aa;
+
+
+5.
+DDL ：create drop alter truncate show use desc 
+DML ：Insert delete update select
+
+
+6.
+use db_zeh;
+
+drop table stu;
+drop table stu_001;
+
+desc stu;
+desc stu_001;
+
+create table stu(
+	sid varchar(10) primary key,
+	sname varchar(20)
+);
+
+alter table stu rename to stu_001;
+
+alter table stu_001 add height float;
+
+alter table stu_001 change height hei float;
+
+alter table stu_001 drop hei;
+
+7.
+实体完整性：主键约束
+参照完整性：外键约束
+用户自定义完整性：检查约束

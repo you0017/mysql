@@ -1,0 +1,63 @@
+根据上次的作业，继续完成如下：
+1、用等值连接的方式查询 员工编号、员工姓名、员工部门、员工薪资
+
+select emp.empno,emp.ename,dept.dname,emp.comm from emp,dept where emp.deptno=dept.deptno;
+
+2、用非等值连接的方式查询 员工编号、员工姓名、员工部门、员工薪资等级
+select emp.empno,emp.ename,emp.deptno,salgrade.grade from emp,salgrade where emp.sal between losal and hisal;
+
+
+
+3、统计查询 工程部 有多少员工，显示 部门名称 人数 
+select count(*) from emp where job = '工程部';
+
+
+4、查询奖金最高员工的姓名
+select ename from emp where emp.comm=(select max(comm) from emp);
+
+
+
+
+5、是自连接的方式，查询每个员工名称及对应的上级领导名称
+select a.ename,b.mgr from emp as a INNER JOIN emp as b on a.ename=b.ename;
+
+
+
+
+6、使用 列子查询，查询 部门编号 小于4 的 员工信息
+select * from emp where deptno in (select deptno from dept where deptno<4);
+
+
+7、查询每个员工到目的为止入职了多少天
+select empno,ename,DATEDIFF(now(),hiredate) from emp;
+
+
+8、创建视图，能查询员工的 姓名、薪资 ？
+create view emp_1 as select ename,sal from emp;
+select * from emp_1;
+
+
+9、视图的作用是什么？
+修改安全，查询高效
+
+
+10、根据 员工的姓名创建索引
+create index name_1 on emp(ename);
+
+
+1、查询姓名长度最长学生，并把他的学号和年龄显示出来，使用子查询实现
+select S,SA FROM s where length(SN)=(select max(length(SN)) from s);
+
+
+2、查询s表中学号为5的学生姓名、所在大学，再查询学号为10的学生姓名、所在大学，然后联合显示
+select SN,SD,S FROM s where S='5' UNION select SN,SD,S FROM s where S='10';
+
+
+3、创建一个视图，视图能查询出sc表成绩大于80分的信息行记录
+create view sc_1 as (select * from sc where sc.G>80);
+select * from sc_1;
+
+4、通过视图把50分以下的数据改为62分
+create view sc_2 as (select * from sc);
+update sc_2 set G=62 WHERE G<62;
+select * from sc_2;

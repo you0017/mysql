@@ -1,0 +1,43 @@
+select * from student_info;
+
+select sname from student_info where age=(select min(age) from student_info); 
+
+select sname from student_info where age in(select * from (select age from student_info ORDER BY age limit 3)as s);
+
+create table student_info2 select * from student_info;
+
+select * from student_info union  select * from student_info2;
+
+
+
+create table  t1(
+    cno int,
+    cname varchar(10),
+    cpno int
+)default charset='utf8';
+
+insert into t1 values(1,'数据库',5);
+insert into t1(cno,cname) values(2,'高等数学');
+insert into t1 values(3,'信息系统',1);
+insert into t1 values(4,'操作系统',6);
+insert into t1 values(5,'数据结构',7);
+insert into t1(cno,cname)  values(6,'数据处理');
+insert into t1 values(7,'C语言',6);
+
+
+select * from t1;
+select T1.*,T2.cname from t1 as T1,t1 as T2 where T1.cpno=T2.cno ORDER BY cno;
+select * from t1;
+
+create index i_1 on student_info(age);
+
+select now();
+select * from student_info where age='20';
+select now();
+
+drop index i_1 on student_info;
+
+
+
+
+

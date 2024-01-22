@@ -1,0 +1,126 @@
+1、创建三个表：
+表1部门表：
+DEPT 字段：
+DEPTNO 部门编号（整型、主键）、
+DNAME 部门名称（字符串）
+LOC 部门地址（字符串）
+
+表2员工表：
+EMP 字段：
+EMPNO 员工编号（整型、主键）、
+ENAME 员工名称 （字符串）、
+JOB 工作（字符串）
+MGR 直属领导编号（整型）
+HIREDATE 入职时间（日期类型）、
+SAL 工资（浮点型）、
+COMM奖金（浮点型）、
+DEPTNO（部门号 外建）
+
+表3工资等级表：
+SALGRADE 字段：
+GRADE（工资等级、整型）、
+LOSAL（最低工资、浮点型）
+HISAL（最高工资、浮点型）
+
+
+
+2、完成如下数据库题目：
+2.1 往三个表分别插入10条业务数据 
+2.2 员工表 查询入职时间为'2022-10-01'之前入职的员工信息
+2.3 员工表 查询工资在 3500--4000的范围的员工信息
+2.4 员工表 对员工进行薪资升序排序、然后对你员工编号进行降序排序
+2.5 员工表 查询 部门号 为2、4的所有员工信息
+2.6 员工表 查询 姓李的所有员工信息
+2.7 员工表 查询 奖金 为 2000、2500、4000的员工信息
+2.8 部门表 查询 地址在 湖南 的所有部门
+2.9 薪资表 查询 薪资等级为 A、C 两级的信息
+
+
+
+
+
+1.
+create table dept(
+	deptno int primary key, -- 部门编号
+	dname varchar(20), -- 部门名称
+	loc varchar(30) -- 部门地址
+);
+
+create table emp(
+	empno int primary key, -- 员工编号
+	ename varchar(20), -- 员工名称
+	job varchar(20), -- 工作
+	mgr int, -- 直属领导编号
+	hiredate Date, -- 入职时间
+	sal double(6,2), -- 工资
+	comm DOUBLE(6,2), -- 奖金
+	deptno int,
+	CONSTRAINT deptno FOREIGN key (deptno) REFERENCES dept(deptno)
+);
+	
+	
+create table salgrade(
+	grade char(1), -- 工资等级
+	losal double(6,2), -- 最低工资
+	hisal double(6,2) -- 最高工资
+);
+
+
+2.1
+insert into dept values(1,'部门1','湖南'),
+	(3,'部门3','河南'),
+	(6,'部门6','广西'),
+	(7,'部门7','山东'),
+	(2,'部门2','湖北'),
+	(8,'部门8','山西'),
+	(9,'部门9','北京'),
+	(4,'部门4','河北'),
+	(5,'部门5','广东'),
+	(10,'部门10','上海');
+
+insert into emp values(001,'甲','工作1',1,'2001-1-1',1000,1000,1),
+	(002,'乙','工作2',2,'2002-1-1',2000,2000,2),
+	(008,'辛','工作8',8,'2008-1-1',8000,8000,8),
+	(010,'葵','工作10',10,'2010-1-1',10000,10000,10),
+	(003,'丙','工作3',3,'2003-1-1',3000,3000,3),
+	(005,'戊','工作5',5,'2005-1-1',5000,5000,5),
+	(006,'己','工作6',6,'2006-1-1',6000,6000,6),
+	(009,'壬','工作9',9,'2009-1-1',9000,9000,9),
+	(007,'庚','工作7',7,'2007-1-1',7000,7000,7),
+	(004,'丁','工作4',4,'2004-1-1',4000,4000,4);
+
+
+insert into salgrade values('B',2000,2999),
+	('C',3000,3999),
+	('H',8000,8999),
+	('E',5000,5999),
+	('F',6000,6999),
+	('G',7000,7999),
+	('D',4000,4999),
+	('I',9000,9999),
+	('A',1000,1999),
+	('J',10000,10999);
+
+2.2
+select * from emp where hiredate <= '2022-10-01';
+
+2.3
+select * from emp where sal BETWEEN 3500 and 4000;
+
+2.4
+select * from emp ORDER BY sal asc ,empno desc;
+
+2.5
+select * from emp where deptno=2 or deptno=4;
+
+2.6
+select * from emp where ename like '李%';
+
+2.7
+select * from emp where comm=2000 or comm=2500 or comm=4000;
+
+2.8
+select * from dept where loc='湖南';
+
+2.9
+select * from salgrade where grade='A' or grade='C';

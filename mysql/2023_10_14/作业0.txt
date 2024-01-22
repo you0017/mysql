@@ -1,0 +1,125 @@
+mysql数据库作业_20231014:
+1、根据上次作业，在每个表中插入20条记录，语句和成功之后的查询截图
+2、查询语文成绩前三名的学生信息，数学成绩倒数3名的成绩信息
+3、查询学号为5的学生姓名和年龄
+4、查询SC表，分数大于80分的课程编号和分数， 并放置到一个新表 SC80 中
+5、新建一个CC表，把C表的数据放置到该表
+6、查询SC表中的的课程编号和分数，并去除重复显示的
+7、使用between and 查询 分数在 60-80之间的学生学号
+8、使用 in 查询 包含 "王名"、“李亮” 的学生信息
+9、在S表中添加一列，sbirth，datetime类型，用update填入学生生日
+10、把S表中的学生生日小于1993的学生进行减去3个月的操作
+11、查询每个学生到目前活了多少天
+12、在S表中新增days列，该列存放学生到目前为止活了多少天
+13、新建一个CC表，把C表的数据放置到该表
+14、把S表中的si字段由int型改为varchar2(10)，保持数据内容不变
+15、对S表中的si进行操作，在该列前面加上前缀'test_'，使用concat_ws完成
+16、把对S表中的si进行操作,把test_改为首字母大写
+17、把SC表中的学生成绩四舍五入取整显示
+18、统计数学有多少人参加考试（根据sc表统计即可）
+19、统计每门课程的平均成绩、最高成绩、最低成绩，并按最高成绩降序排序（根据sc表统计即可）
+20、显示平均分在80以上的课程名称（根据sc表统计即可）
+21、使用等值链接把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+22、使用内连接把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+23、使用外连接把sc表和S表中的学生编号对应，查询出学生姓名、年龄、分数，以S表为主表
+24、使用子查询把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+
+
+
+2.
+select * from S where S in (select s.S from (select S from SC where C='1' ORDER BY G desc limit 3) as s);
+select * from S where S in (select s.S from (select S from SC where C='2' ORDER BY G asc limit 3) as s);
+
+3.
+select SN,SA from S where S='5';
+
+4.
+create table SC80 (select C,G from SC where G>80);
+
+
+5、新建一个CC表，把C表的数据放置到该表
+create table CC select * from C;
+
+select * from CC;
+drop table CC;
+
+
+6、查询SC表中的的课程编号和分数，并去除重复显示的
+select DISTINCT C,G from SC;
+
+
+
+
+
+7、使用between and 查询 分数在 60-80之间的学生学号
+select S from SC where G BETWEEN 60 and 80;
+
+
+
+8、使用 in 查询 包含 "王名"、“李亮” 的学生信息
+select * from S where SN in ('王名','李亮');
+
+
+
+9、在S表中添加一列，sbirth，datetime类型，用update填入学生生日
+alter table S add sibrth datetime;
+UPDATE S set sibrth='2003-1-1';
+select * from S;
+
+
+
+10、把S表中的学生生日小于1993的学生进行减去3个月的操作
+update s set sibrth=date_add(sibrth,interval -3 month) 
+WHERE sibrth<'1993-1-1';
+
+
+
+11、查询每个学生到目前活了多少天
+select DATEDIFF(now(),sibrth)from S;
+
+12、在S表中新增days列，该列存放学生到目前为止活了多少天
+alter table S add days int;
+UPDATE S set days=DATEDIFF(now(),sibrth);
+
+
+13、新建一个CC表，把C表的数据放置到该表
+create table CC select * from C;
+
+14、把S表中的si字段由int型改为varchar2(10)，保持数据内容不变
+alter table S modify SA varchar(20);
+
+
+15、对S表中的si进行操作，在该列前面加上前缀'test_'，使用concat_ws完成
+UPDATE S SET SA=CONCAT_WS('','test_',SA);
+SELECT SA FROM S;
+desc S;
+
+
+16、把对S表中的si进行操作,把test_改为首字母大写
+update S set SA=UPPER(SA);
+17.
+select round(G) from SC;
+
+18.
+select count(*) from (select distinct S from SC) as sc;
+
+19.
+select C,avg(G) from SC GROUP BY C ORDER BY AVG(G) desc;
+select C,MIN(G) from SC GROUP BY C ORDER BY MIN(G) desc;
+select C,MAX(G) from SC GROUP BY C ORDER BY MAX(G) desc;
+
+20.
+select C.CN from C,(select C,AVG(G)FROM SC GROUP BY C HAVING AVG(G)>=80)AS sc where C.C=SC.C;
+
+21.
+select C.CN,SC.G from SC,C where SC.C=C.C;
+
+22.
+select SC.G,C.CN from SC INNER JOIN C where SC.C=C.C; 
+
+
+23.
+select SN,SA,SC.G from S left join SC on S.S = SC.S;
+
+24.
+select C.CN,sc.G from C,(select C,G from SC) as sc;

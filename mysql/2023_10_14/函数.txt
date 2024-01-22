@@ -1,0 +1,96 @@
+select abs(-10); -- 绝对值 10
+select floor(9.99); -- 向下取整 9
+select floor(-2.01); -- 向下取整 -3
+select ceiling(1.001); -- 向上取整 2
+select mod(10,3); -- 取余 1
+select truncate(1.6666,2); -- 截取 1.66
+select truncate(166.6666,-1); -- 截取 160
+select round(1.6666,2); -- 四舍五入保留两位小数 1.67
+select round(16.444,-1); -- 四舍五入到十位 20
+
+
+
+
+-- 日期函数
+select now();
+select CURRENT_DATE;
+select CURRENT_TIME;
+select Hour('1995-10-02 15:20:32');-- 返回指定日期的小时
+select Month('1995-10-2 15:20:32');-- 返回指定日期的月份
+select minute('1995/10/2 15/20/32');
+select second(now());
+select DayName(now());-- 返回指定日期是周几
+select DAYOFWEEK(now()); -- 返回指定日期是一周的第几天
+
+
+select DATE_ADD(now(),interval 15 DAY); -- 日期增减函数
+select DATE_ADD(now(),interval 3 year);
+select DATE_ADD(now(),interval 1 month);
+select DATE_ADD(now(),interval 10000 second);
+
+
+select DATEDIFF(now(),'2004-2-29'); -- 日期相减函数
+
+
+
+
+-- 字符串处理函数
+select concat('hello',' ','world'); -- 字符串拼接
+select CONCAT_WS('@','china','american'); -- 字符串拼接+分隔符
+select LEFT('newdream',3); -- 左边截取
+select right('newdream',3); -- 右边截取
+select LENGTH(' 123 去'); -- 长度
+select RTRIM('  ad '); -- 去掉右边空格
+SELECT LTRIM('  ad  '); -- 去掉左边空格
+select TRIM('   qeqw  '); -- 去掉全部空格
+select upper('hello'); -- 大写
+select lower('Hello'); -- 小写
+select SUBSTRING('123456789',4); -- 字符串截取
+select SUBSTRING('123456789',4,3); -- 第四个开始，截取三个
+select SUBSTRING('123456789',-4,3); -- 倒过来看
+select replace('newdream','e','i'); -- 字符串替换
+
+
+-- 其他函数
+show databases;
+select cast('123abc' as signed);
+select convert('66.5',signed); -- 类型转化函数 字符串转其他类型
+select database(); -- 返回当前数据库
+select connection_id();-- 返回连接数据库的ud号
+select user();-- 返回当前登录的用户名
+select version(); -- 查看数据库版本
+
+select found_rows(); -- 返回最后一个select查询的记录数
+
+
+
+drop table score;
+
+create table score(
+	c varchar(10),
+	sid varchar(10),
+	score int
+);
+
+
+insert into score values('数学','0010015',80);
+insert into score values('语文','0010015',65);
+insert into score values('语文','0010012',78);
+insert into score values('数学','0010012',92);
+
+select * from score;
+
+-- 聚合函数
+select sum(score) from score;
+select AVG(score) from score;
+select max(score) from score;
+select min(score) from score;
+select count(score) from score;
+
+
+select sid,avg(score) from score group by sid;
+select sid,avg(score) from score group by sid having avg(score)>=80;
+
+
+select * from stu_i;
+select sname,count(*) from stu_i GROUP BY sname;

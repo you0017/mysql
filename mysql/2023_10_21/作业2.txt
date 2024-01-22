@@ -1,0 +1,22 @@
+1、linux重新安装一个，要求过程中截图 + 文档说明
+2、命令操作：在/tmp目录下新建一个 自己英文名称的文件，进入文件夹，创建两个文件 a.txt b.txt
+3、把两个文件分别复制一份，名称为 a.txt.bak  b.txt.bak
+4、对a.txt进行重命名操作 命名为 英文名称_a.txt
+5、删除 b.txt文件
+6、~ . ..  / 分别表示的含义是什么？
+
+
+cd /
+cd tmp
+touch a.txt
+touch b.txt
+cp a.txt a.txt.bak
+cp b.txt b.txt.bak
+mv a.txt _a.txt
+rm b.txt
+
+
+..上一个目录
+.当前目录
+/根目录
+~用户目录

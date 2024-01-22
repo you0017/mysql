@@ -1,0 +1,223 @@
+create table S(
+	S varchar(20) primary key, #学号
+	SN varchar(10),#姓名
+	SD varchar(20) default '长沙理工大学',#所属单位
+	SA int, #年龄
+	check(SA>=0 and SA<=150)
+);
+
+create table C(
+	C varchar(20) primary key,#编号
+	CN varchar(20)#课程名称
+);
+
+
+create table SC(
+	S varchar(20),
+	C varchar(20),
+	G decimal(4,1) default 0.0,
+	CONSTRAINT S_1 FOREIGN key (S) REFERENCES S(S),
+	CONSTRAINT C_1 FOREIGN key (C) REFERENCES C(C)
+);
+
+insert into S1(S,SN,SA) values('2023001','甲','20'),
+	('2023002','乙','19'),
+	('2023003','丙','21'),
+	('2023004','丁','22'),
+	('2023005','戊','23'),
+	('2023006','己','21'),
+	('2023007','庚','21'),
+	('2023008','辛','22'),
+	('2023009','壬','23'),
+	('2023010','葵','21'),
+	('2023011','甲1','20'),
+	('2023012','乙2','19'),
+	('2023013','丙3','21'),
+	('2023014','丁4','22'),
+	('2023015','戊5','23'),
+	('2023016','己6','21'),
+	('2023017','庚7','21'),
+	('2023018','辛8','22'),
+	('2023019','壬9','23'),
+	('2023020','葵10','21');
+	
+insert into C values('1','语文'),
+	('2','数学'),
+	('3','英语'),
+	('4','物理'),
+	('5','化学'),
+	('6','生物'),
+	('7','历史'),
+	('8','地理'),
+	('9','政治'),
+	('10','体育'),
+	('11','语文1'),
+	('12','数学2'),
+	('13','英语3'),
+	('14','物理4'),
+	('15','化学5'),
+	('16','生物6'),
+	('17','历史7'),
+	('18','地理8'),
+	('19','政治9'),
+	('20','体育10');
+	
+insert into SC values('2023001','1',80),
+	('2023002','2',81),
+	('2023003','3',95),
+	('2023004','4',83),
+	('2023005','5',95),
+	('2023006','6',85),
+	('2023007','7',96),
+	('2023008','8',67),
+	('2023009','9',88),
+	('2023010','10',89),
+	('2023011','11',90),
+	('2023012','12',61),
+	('2023013','13',52),
+	('2023014','14',63),
+	('2023015','15',74),
+	('2023016','1',85),
+	('2023017','1',86),
+	('2023018','1',97),
+	('2023019','1',68),
+	('2023020','1',79);
+	
+	
+	
+select * from S;
+select * from C;
+select * from SC;
+
+drop table SC;
+drop table S;
+drop table C;
+
+
+2、查询语文成绩前三名的学生信息，数学成绩倒数3名的成绩信息
+select * from S where S in (select s.S from (select S from SC where C='1' ORDER BY G desc limit 3) as s);
+select * from S where S in (select s.S from (select S from SC where C='2' ORDER BY G asc limit 3) as s);
+
+
+3、查询学号为5的学生姓名和年龄
+select SN,SA from S where S='5';
+
+4、查询SC表，分数大于80分的课程编号和分数， 并放置到一个新表 SC80 中
+create table SC80 (select C,G from SC where G>80);
+
+select * from SC80;
+drop table SC80;
+
+
+5、新建一个CC表，把C表的数据放置到该表
+create table CC select * from C;
+
+select * from CC;
+drop table CC;
+
+
+6、查询SC表中的的课程编号和分数，并去除重复显示的
+select DISTINCT C,G from SC;
+
+
+
+
+
+7、使用between and 查询 分数在 60-80之间的学生学号
+select S from SC where G BETWEEN 60 and 80;
+
+
+
+8、使用 in 查询 包含 "王名"、“李亮” 的学生信息
+select * from S where SN in ('王名','李亮');
+
+
+
+9、在S表中添加一列，sbirth，datetime类型，用update填入学生生日
+alter table S add sibrth datetime;
+UPDATE S set sibrth='2003-1-1';
+select * from S;
+
+
+
+10、把S表中的学生生日小于1993的学生进行减去3个月的操作
+update s set sibrth=date_add(sibrth,interval -3 month) 
+WHERE sibrth<'1993-1-1';
+
+
+
+11、查询每个学生到目前活了多少天
+select DATEDIFF(now(),sibrth)from S;
+
+12、在S表中新增days列，该列存放学生到目前为止活了多少天
+alter table S add days int;
+UPDATE S set days=DATEDIFF(now(),sibrth);
+
+
+13、新建一个CC表，把C表的数据放置到该表
+create table CC select * from C;
+
+14、把S表中的si字段由int型改为varchar2(10)，保持数据内容不变
+alter table S modify SA varchar(20);
+
+
+15、对S表中的si进行操作，在该列前面加上前缀'test_'，使用concat_ws完成
+UPDATE S SET SA=CONCAT_WS('','test_',SA);
+SELECT SA FROM S;
+desc S;
+select CONCAT_WS('','test_',SA) from S1;
+UPDATE S1 SET SA=CONCAT_WS('','test_',SA);
+select * FROM SC;
+ALTER TABLE S1
+   DROP CONSTRAINT S1_chk_1;
+	 select * from S1;
+
+
+
+
+16、把对S表中的si进行操作,把test_改为首字母大写
+update S1 set SA=UPPER(SA);
+
+
+
+17、把SC表中的学生成绩四舍五入取整显示
+select round(G) from SC;
+
+
+
+18、统计数学有多少人参加考试（根据sc表统计即可）
+select count(*) from (select distinct S from SC) as sc;
+
+
+
+19、统计每门课程的平均成绩、最高成绩、最低成绩，并按最高成绩降序排序（根据sc表统计即可）
+select C,avg(G) from SC GROUP BY C ORDER BY AVG(G) desc;
+select C,MIN(G) from SC GROUP BY C ORDER BY MIN(G) desc;
+select C,MAX(G) from SC GROUP BY C ORDER BY MAX(G) desc;
+
+
+20、显示平均分在80以上的课程名称（根据sc表统计即可）
+select C.CN from C,(select C,AVG(G)FROM SC GROUP BY C HAVING AVG(G)>=80)AS sc where C.C=SC.C;
+
+
+21、使用等值链接把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+select C.CN,SC.G from SC,C where SC.C=C.C;
+
+
+22、使用内连接把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+select SC.G,C.CN from SC INNER JOIN C where SC.C=C.C; 
+
+
+23、使用外连接把sc表和S表中的学生编号对应，查询出学生姓名、年龄、分数，以S表为主表
+select SN,SA,SC.G from S left join SC on S.S = SC.S;
+
+
+24、使用子查询把sc表和c表中的课程编号对应，查询出课程名称，课程分数两项
+select C.CN,sc.G from C,(select C,G from SC) as sc;
+
+
+
+
+
+
+

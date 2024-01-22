@@ -1,0 +1,125 @@
+create table student_info(
+    sid int,
+    sname varchar(10),
+    sex char(1),
+    class_name varchar(10)
+)default CHARSET='utf8';
+
+create table cource_info(
+    cid int,
+    cname varchar(10)
+)default CHARSET='utf8';
+
+create table score_info(
+    sid int,
+    cid int,
+    sg float
+);
+
+
+drop table student_info;
+drop table cource_info;
+drop table score_info;
+
+insert into student_info values (1,'王明','男','5班');
+insert into student_info values (2,'刘超','男','4班');
+insert into student_info values (3,'萌萌','女','5班');
+insert into student_info values (4,'乐乐','女','3班');
+insert into student_info values (5,'李白','男','4班');
+insert into student_info values (6,'张三','男','4班');
+
+
+insert into cource_info values(1,'语文');
+insert into cource_info values(2,'数学');
+insert into cource_info values(3,'英语');
+
+
+insert into score_info values(1,1,85);
+insert into score_info values(1,2,66);
+insert into score_info values(1,3,72);
+insert into score_info values(2,1,92);
+insert into score_info values(2,2,68);
+insert into score_info values(3,1,100);
+insert into score_info values(3,2,98);
+insert into score_info values(3,3,92);
+insert into score_info values(4,1,78);
+insert into score_info values(4,2,82);
+insert into score_info values(4,3,45);
+insert into score_info values(5,1,85);
+insert into score_info values(5,3,46);
+
+select * from student_info;
+select * from cource_info;
+select * from score_info;
+
+-- 等值连接
+select student_info.sid,score_info.sid,sname,cid,sg from student_info,score_info where student_info.sid = score_info.sid;
+
+
+
+drop table score_level
+
+create table score_level(
+    s_level char(1),
+    min_score float,
+    max_score float
+);
+
+insert into score_level values( 'A' ,90,100);
+insert into score_level values( 'B' ,80,89);
+insert into score_level values( 'C' ,70,79);
+insert into score_level values( 'D' ,60,69);
+insert into score_level values( 'E' ,0,59);
+
+-- 非等值连接
+select score_info.*,s_level from score_info,score_level where sg BETWEEN min_score and max_score;
+
+
+
+-- 三个表等值连接
+select
+si.sname,ci.cname,sc.sg
+from student_info si,cource_info ci,score_info sc
+where si.sid=sc.sid and
+ci.cid = sc.cid;
+
+
+-- 左连接
+select sname,cid,sg
+from student_info 
+LEFT JOIN score_info on student_info.sid=score_info.sid;
+
+-- 右连接
+select cid,sg,sname
+from score_info 
+RIGHT JOIN student_info on student_info.sid=score_info.sid;
+
+
+-- 内连接
+select cid,sg,sname
+from score_info 
+INNER JOIN student_info on student_info.sid=score_info.sid;
+
+
+
+
+alter table student_info add age int;
+
+update student_info set age = 18 where sid=1;
+update student_info set age = 22 where sid=2;
+update student_info set age = 16 where sid=3;
+update student_info set age = 20 where sid=4;
+update student_info set age = 22 where sid=5;
+update student_info set age = 24 where sid=6;
+
+
+
+-- 查询班上年纪最小的学生
+-- 嵌套查询
+select min(age) from student_info;
+select sname from student_info where age=16;
+
+select sname from student_info where age=(select min(age) from student_info);
+
+
+
